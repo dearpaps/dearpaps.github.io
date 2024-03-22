@@ -12,3 +12,32 @@ gsap.timeline({scrollTrigger:{trigger:'.scrollDist', start:'top top', end:'botto
 $('#arrowBtn').on('mouseenter', (e)=>{ gsap.to('.arrow', {y:10, duration:0.8, ease:'back.inOut(3)', overwrite:'auto'}); })
 $('#arrowBtn').on('mouseleave', (e)=>{ gsap.to('.arrow', {y:0, duration:0.5, ease:'power3.out', overwrite:'auto'}); })
 $('#arrowBtn').on('click', (e)=>{ gsap.to(window, {scrollTo:innerHeight, duration:1.5, ease:'power1.inOut'}); }) // scrollTo requires the ScrollTo plugin (not to be confused w/ ScrollTrigger)
+
+
+*!
+ * jQuery - .scrollTo()
+ *
+ *  Author:
+ *  Timothy A. Perez
+ *
+ * Date: OCT 2012
+ * Comments: Setting new web standards...
+ */
+// .scrollTo - Plugin
+$.fn.scrollTo = function( target, options, callback ){
+if(typeof options == 'function' && arguments.length == 2){ callback = options; options = target; }
+var settings = $.extend({
+scrollTarget  : target,
+offsetTop     : 50,
+duration      : 500,
+easing        : 'swing'
+}, options);
+return this.each(function(){
+var scrollPane = $(this);
+var scrollTarget = (typeof settings.scrollTarget == "number") ? settings.scrollTarget : $(settings.scrollTarget);
+var scrollY = (typeof scrollTarget == "number") ? scrollTarget : scrollTarget.offset().top + scrollPane.scrollTop() - parseInt(settings.offsetTop);
+scrollPane.animate({scrollTop : scrollY }, parseInt(settings.duration), settings.easing, function(){
+if (typeof callback == 'function') { callback.call(this); }
+});
+});
+}
